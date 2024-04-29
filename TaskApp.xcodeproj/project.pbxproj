@@ -15,6 +15,7 @@
 		AE08785B2BD52C1500BEA3F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE08785A2BD52C1500BEA3F2 /* Assets.xcassets */; };
 		AE08785E2BD52C1500BEA3F2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE08785C2BD52C1500BEA3F2 /* LaunchScreen.storyboard */; };
 		AE0878662BD6764A00BEA3F2 /* InputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0878652BD6764A00BEA3F2 /* InputViewController.swift */; };
+		AE5133B32BDF5E30006DC462 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5133B12BDF5D59006DC462 /* Task.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		AE08785D2BD52C1500BEA3F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AE08785F2BD52C1500BEA3F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE0878652BD6764A00BEA3F2 /* InputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputViewController.swift; sourceTree = "<group>"; };
+		AE5133B12BDF5D59006DC462 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		EA2248551E9907B827D80592 /* Pods_TaskApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaskApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -73,6 +75,7 @@
 		AE0878502BD52C1300BEA3F2 /* TaskApp */ = {
 			isa = PBXGroup;
 			children = (
+				AE5133B12BDF5D59006DC462 /* Task.swift */,
 				AE0878512BD52C1300BEA3F2 /* AppDelegate.swift */,
 				AE0878532BD52C1300BEA3F2 /* SceneDelegate.swift */,
 				AE0878552BD52C1300BEA3F2 /* ViewController.swift */,
@@ -211,6 +214,7 @@
 			files = (
 				AE0878562BD52C1300BEA3F2 /* ViewController.swift in Sources */,
 				AE0878522BD52C1300BEA3F2 /* AppDelegate.swift in Sources */,
+				AE5133B32BDF5E30006DC462 /* Task.swift in Sources */,
 				AE0878542BD52C1300BEA3F2 /* SceneDelegate.swift in Sources */,
 				AE0878662BD6764A00BEA3F2 /* InputViewController.swift in Sources */,
 			);

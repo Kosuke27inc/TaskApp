@@ -7,12 +7,10 @@
 
 import UIKit
 import UserNotifications    // 追加
-
+import RealmSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-    
-    
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -22,6 +20,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             // Enable or disable features based on authorization
         } // --- ここまで追加 ---
         center.delegate = self
+        // Realmのマイグレーション処理
+        let config = Realm.Configuration(
+            schemaVersion: 1, // ここで新しいスキーマバージョンを設定します
+            migrationBlock: { migration, oldSchemaVersion in
+                if oldSchemaVersion < 1 {
+                    // 新しいプロパティの追加などのマイグレーション処理をここに書きます
+                    // 今回のケースでは、新しいフィールド'category'が追加されているので、
+                    // 既存のレコードにデフォルト値を設定する必要がありますが、
+                    // Realmは自動的に新しいプロパティを認識し、デフォルト値（通常はnilまたは空の値）を使用します。
+                }
+            }
+        )
+        Realm.Configuration.defaultConfiguration = config
         
         return true
     }
