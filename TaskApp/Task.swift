@@ -7,7 +7,7 @@
 
 import RealmSwift
 
-class TaskItem: Object {
+class Task: Object {
     // 管理用 ID。プライマリーキー
     @Persisted(primaryKey: true) var id: ObjectId
 

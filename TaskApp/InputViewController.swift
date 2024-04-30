@@ -13,8 +13,9 @@ class InputViewController: UIViewController {
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var categoryTextField: UITextField!
-    let realm = try! Realm()    // 追加する
-    var task: TaskItem!
+    
+    let realm = try! Realm()
+    var task: Task!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,7 @@ class InputViewController: UIViewController {
         titleTextField.text = task.title
         contentsTextView.text = task.contents
         datePicker.date = task.date
+        categoryTextField.text = task.category // 追加
     }
     
     @objc func dismissKeyboard(){
@@ -33,9 +35,6 @@ class InputViewController: UIViewController {
         view.endEditing(true)
     }
     
-    // Do any additional setup after loading the view.
-    
-    // 追加する
     override func viewWillDisappear(_ animated: Bool) {
         try! realm.write {
             self.task.title = self.titleTextField.text!
@@ -45,14 +44,14 @@ class InputViewController: UIViewController {
             self.realm.add(self.task, update: .modified)
         }
         
-        setNotification(task: task)   // 追加
-        
+        setNotification(task: task)
         super.viewWillDisappear(animated)
     }
     
-    // タスクのローカル通知を登録する --- ここから ---
-    func setNotification(task: TaskItem) {
+    // タスクのローカル通知を登録する
+    func setNotification(task: Task) {
         let content = UNMutableNotificationContent()
+        
         // タイトルと内容を設定(中身がない場合メッセージ無しで音だけの通知になるので「(xxなし)」を表示する)
         if task.title == "" {
             content.title = "(タイトルなし)"
@@ -88,14 +87,5 @@ class InputViewController: UIViewController {
                 print("---------------/")
             }
         }
-    } // --- ここまで追加 ---
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
+    }
 }

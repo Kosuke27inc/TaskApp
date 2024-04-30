@@ -13,37 +13,28 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var tableView: UITableView!
     
     // DB内のタスクが格納されるリスト
-    var taskArray: Results<TaskItem>?
-    var allTasks: Results<TaskItem>?
-    var filteredTasks: Results<TaskItem>?
+    var taskArray: Results<Task>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = UITableView.automaticDimension
+        tableView.fillerRowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44.0 // 推定の行の高さ
         tableView.delegate = self
         tableView.dataSource = self
         
         // Realmインスタンスを取得し、TaskItemオブジェクトのリストを取得する
         let realm = try! Realm()
-        taskArray = realm.objects(TaskItem.self).sorted(byKeyPath: "date", ascending: true)
-        // Realmから全てのタスクを取得
-        allTasks = realm.objects(TaskItem.self).sorted(byKeyPath: "date", ascending: true)
-        // 最初はフィルタリングしないので、全てのタスクを表示
-        filteredTasks = allTasks
+        taskArray = realm.objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+        
         // SearchBarのデリゲートを設定
         if let searchBar = self.navigationItem.titleView as? UISearchBar {
             searchBar.delegate = self
-        } else {
-            // SearchBarのインスタンスがなければ、新しく作成して設定する
-            let searchBar = UISearchBar()
-            searchBar.delegate = self
-            self.navigationItem.titleView = searchBar
+        }
+        
         //キーボードを隠すやつ
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
-        }
     }
     
     @objc func dismissKeyboard() {
@@ -57,8 +48,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 // ここでTaskItemオブジェクトを渡す
                 inputViewController.task = taskArray?[indexPath.row]
             } else {
-                // 新しいTaskItemを作成し、InputViewControllerで処理する
-                let newTask = TaskItem()
+                // 新しいTaskを作成し、InputViewControllerで処理する
+                let newTask = Task()
                 let realm = try! Realm()
                 try! realm.write {
                     realm.add(newTask)
@@ -76,13 +67,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     // テーブルビューのデータソースメソッド
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredTasks?.count ?? 0
+        return taskArray?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
-        if let task = filteredTasks?[indexPath.row] {
+        if let task = taskArray?[indexPath.row] {
             var content = cell.defaultContentConfiguration()
             content.text = task.title
             let formatter = DateFormatter()
@@ -127,10 +118,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // UISearchBarDelegate メソッド
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
-            filteredTasks = allTasks
+            // 検索バーが空の場合は全てのタスクを表示
+            let realm = try! Realm()
+            taskArray = realm.objects(Task.self).sorted(byKeyPath: "date", ascending: true)
         } else {
             // 検索テキストに基づいてタスクを絞り込む
-            filteredTasks = allTasks?.filter("category CONTAINS[c] %@", searchText)
+            let realm = try! Realm()
+            taskArray = realm.objects(Task.self).filter("category CONTAINS[c] %@", searchText).sorted(byKeyPath: "date", ascending: true)
         }
         tableView.reloadData()
     }
@@ -139,8 +133,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         searchBar.resignFirstResponder()
-        // 全タスクを表示するようにフィルターをリセット
-        filteredTasks = allTasks
+        
+        // 検索バーが空になった時点で全てのタスクを表示
+        let realm = try! Realm()
+        taskArray = realm.objects(Task.self).sorted(byKeyPath: "date", ascending: true)
         tableView.reloadData()
     }
 }
